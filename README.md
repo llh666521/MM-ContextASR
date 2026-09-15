@@ -80,10 +80,10 @@ multiple historical turns without changing the current-turn ASR objective.
 
 | Setting | Historical speech | Historical transcript | Assistant text |
 | --- | :---: | :---: | :---: |
-| **No Context** |  |  |  |
-| **Text-only** |  | Yes | Yes |
-| **Speech-only** | Yes |  | Yes |
-| **Speech+Text** | Yes | Yes | Yes |
+| **No Context** | ✗ | ✗ | ✗ |
+| **Text-only** | ✗ | ✓ | ✓ |
+| **Speech-only** | ✓ | ✗ | ✓ |
+| **Speech+Text** | ✓ | ✓ | ✓ |
 
 Historical content is conditioning information only. The loss is computed over
 the current reference transcript; current references, entity labels, and
@@ -214,4 +214,3 @@ per configuration on Hugging Face. External source licenses continue to apply.
 
 The paper link and BibTeX entry will be added when the public identifier is
 available.
-
