@@ -39,9 +39,12 @@ controlled benchmark for contextual understanding and entity correction.
   <img src="assets/training.svg" width="76%" alt="Multimodal context training scheme">
 </p>
 
-- **Context representation:** combine historical speech, its ASR transcript, and the assistant response; all context-enabled settings retain assistant responses.
-- **Input organization:** interleave historical user and assistant turns in dialogue order, followed by the current speech.
-- **Supervision:** use dialogue history only as conditioning information and compute the training loss on the current transcript.
+Historical user speech, its ASR transcript, and the assistant response are
+organized as user-assistant turns in dialogue order, followed by the current
+speech. All context-enabled settings retain assistant responses, while varying
+whether historical speech and transcripts are provided. Dialogue history serves
+only as conditioning information, and the training loss is computed on the
+current transcript.
 
 | Setting | Historical speech | Historical transcript | Assistant text |
 | --- | :---: | :---: | :---: |
