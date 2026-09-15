@@ -19,15 +19,6 @@
 MM-ContextASR studies how **speech and text history** can jointly improve
 LLM-based ASR while reducing error propagation from imperfect transcripts.
 
-<table align="center">
-  <tr>
-    <td align="center"><strong>872,929</strong><br><sub>training examples</sub></td>
-    <td align="center"><strong>174,587</strong><br><sub>entity anchors</sub></td>
-    <td align="center"><strong>4</strong><br><sub>context settings</sub></td>
-    <td align="center"><strong>1,250</strong><br><sub>benchmark examples</sub></td>
-  </tr>
-</table>
-
 ## 1. Data Pipeline
 
 <p align="center">
