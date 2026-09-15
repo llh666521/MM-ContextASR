@@ -30,7 +30,7 @@ history improves entity, accent, dialect, and target-speaker recognition.**
     <td align="center"><strong>250</strong><br><sub>aligned groups</sub></td>
     <td align="center"><strong>5</strong><br><sub>history scenarios</sub></td>
     <td align="center"><strong>4</strong><br><sub>context settings</sub></td>
-    <td align="center"><strong>26,837</strong><br><sub>external eval rows</sub></td>
+    <td align="center"><strong>26,837</strong><br><sub>total eval rows</sub></td>
   </tr>
 </table>
 
@@ -173,4 +173,3 @@ per configuration on Hugging Face. External source licenses continue to apply.
 
 The paper link and BibTeX entry will be added when the public identifier is
 available. Please star this repository or watch the release page for updates.
-
