@@ -28,7 +28,7 @@ controlled benchmark for contextual understanding and entity correction.
 </p>
 
 1. **Entity Pool:** select proper names and long-tail terms across multiple domains.
-2. **Confusion Pair Construction:** retrieve phonetic neighbors and select plausible ASR confusions.
+2. **Confusion Pair Construction:** construct phonetically confusable candidates and select plausible ASR confusions.
 3. **Dialogue Generation:** construct five controlled histories around each entity-confusion pair.
 4. **Speech Synthesis and Validation:** synthesize user speech and filter low-quality audio with ASR-based checks.
 5. **Multimodal Training Data:** package accepted dialogues into aligned Text-only, Speech-only, and Speech+Text examples.
@@ -58,7 +58,6 @@ current transcript.
 - **Composition:** 250 manually selected target entities and 1,250 examples, with 250 examples per scenario.
 - **Scenarios:** Irrelevant, Implicit, Explicit, Correction, and Repeated Error.
 - **Paired protocol:** hold the current speech, reference, and target entity fixed while varying only dialogue history.
-- **Split integrity:** hold out evaluation entity-confusion pairs and their dialogues from training.
 - **Metric:** report entity recall for each scenario and its macro-average as Overall.
 
 <p align="center">
@@ -67,8 +66,8 @@ current transcript.
 
 ## Download
 
-Download the complete MM-ContextASR Bench release, including metadata and
-1,439 WAV files, from [Hugging Face](https://huggingface.co/datasets/lilonghao/MM-ContextASR-Bench):
+Download MM-ContextASR Bench from
+[Hugging Face](https://huggingface.co/datasets/lilonghao/MM-ContextASR-Bench):
 
 ```bash
 git lfs install
