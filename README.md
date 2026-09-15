@@ -34,9 +34,9 @@ LLM-based ASR while reducing error propagation from imperfect transcripts.
   <img src="assets/pipeline.svg" width="100%" alt="Scenario-controlled multimodal data construction pipeline">
 </p>
 
-The pipeline builds long-tail entity confusion pairs, generates controlled
-dialogues, synthesizes and validates speech, and produces aligned multimodal
-training examples across five contextual scenarios.
+- **Entity-driven:** construct long-tail entity and plausible confusion pairs.
+- **Scenario-controlled:** generate five types of dialogue history.
+- **Multimodal:** synthesize, validate, and align speech-text examples.
 
 ## 2. Context Training
 
@@ -44,9 +44,9 @@ training examples across five contextual scenarios.
   <img src="assets/training.svg" width="76%" alt="Multimodal context training scheme">
 </p>
 
-Historical speech, transcripts, and assistant replies are arranged in dialogue
-order. History is used only as context; loss is computed on the current
-transcript.
+- **Dialogue order:** interleave historical user inputs and assistant replies.
+- **Flexible context:** support No Context, Text-only, Speech-only, and Speech+Text.
+- **Current-turn objective:** compute loss only on the current transcript.
 
 | Setting | Historical speech | Historical transcript | Assistant text |
 | --- | :---: | :---: | :---: |
@@ -57,17 +57,12 @@ transcript.
 
 ## 3. MM-ContextASR Bench
 
-The released benchmark contains **1,250 examples** organized as 250 aligned
-groups across five scenarios: **Irrelevant, Implicit, Explicit, Correction,**
-and **Repeated Error**. Each group fixes the current speech and target entity
-while varying only the dialogue history.
-
-| Examples | Audio | Primary metric |
-| ---: | ---: | --- |
-| **1,250** | **1,439 WAV files** | entity Recall |
+- **1,250 examples:** 250 aligned groups with 1,439 released WAV files.
+- **Five scenarios:** Irrelevant, Implicit, Explicit, Correction, and Repeated Error.
+- **Paired evaluation:** fix current speech and entity while varying only history.
 
 <p align="center">
-  <img src="assets/length_distribution.png" width="100%" alt="MM-ContextASR text-length distributions">
+  <img src="assets/length_distribution.png" width="82%" alt="MM-ContextASR text-length distributions">
 </p>
 
 The full benchmark metadata and audio are hosted on
@@ -83,7 +78,7 @@ interfaces with context and source audio IDs, but do not redistribute audio.
 | --- | ---: | --- |
 | KeSpeech | 19,212 | multi-accent Mandarin; CER, SER, Recall |
 | CV-Yue | 3,525 | Cantonese; t2s CER, SER, Recall |
-| AliMeeting Far-Far v4 | 2,850 | target-speaker CER and SER |
+| AliMeeting Far | 2,850 | target-speaker CER and SER |
 
 ## Usage
 
