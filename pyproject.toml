@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mm-context-asr"
+version = "0.1.0"
+description = "Evaluation tools for multimodal conversational-context ASR"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "Apache-2.0"}
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
+[project.scripts]
+mm-context-asr = "mm_context_asr.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["mm_context_asr*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
