@@ -1,139 +1,136 @@
-# MM-ContextASR
+<h1 align="center">MM-ContextASR</h1>
 
-Official evaluation toolkit for **Multimodal Conversational Context for
-LLM-Based ASR: Data Construction, Training, and Benchmark**.
+<p align="center">
+  <b>Multimodal Conversational Context for LLM-Based ASR</b><br>
+  Data Construction, Training, and Benchmark
+</p>
 
-MM-ContextASR studies how an ASR system uses preceding speech and text when
-recognizing the current utterance. It provides one interface for four input
-settings and four evaluation tracks:
+<p align="center">
+  <a href="https://huggingface.co/datasets/lilonghao/MM-ContextASR-Bench">Hugging Face Dataset</a>
+  &nbsp;|&nbsp;
+  <a href="#benchmark">Benchmark</a>
+  &nbsp;|&nbsp;
+  <a href="#evaluation">Evaluation</a>
+  &nbsp;|&nbsp;
+  <a href="#citation">Citation</a>
+</p>
 
-| Input setting | Historical speech | Historical text |
-| --- | :---: | :---: |
-| No Context |  |  |
-| Text-only |  | yes |
-| Speech-only | yes |  |
-| Speech+Text | yes | yes |
+MM-ContextASR studies how speech and text from dialogue history help an ASR
+system recognize the current utterance. The release combines a controlled
+multimodal benchmark with evaluation metadata for multi-accent, Cantonese, and
+target-speaker ASR.
 
-| Track | Task | Evaluation split | Metrics |
-| --- | --- | ---: | --- |
-| MM-ContextASR Bench | contextual entity ASR | 1,250 examples / 250 aligned groups | entity Recall |
-| KeSpeech | multi-accent Mandarin ASR | 19,212 utterances | CER, SER, entity Recall |
-| CV-Yue | Cantonese ASR | 3,525 utterances | CER, SER, entity Recall |
-| AliMeeting Far-Far v4 | target-speaker ASR | 2,850 overlap segments | target-only CER, SER |
+<p align="center">
+  <img src="assets/length_distribution.png" width="100%" alt="Text-length distributions in MM-ContextASR Bench">
+</p>
 
-## Highlights
+## News
 
-- **Controlled histories.** MM-ContextASR fixes the current speech, reference,
-  and target entity while varying five history scenarios.
-- **Multimodal inputs.** A canonical record can be rendered as No Context,
-  Text-only, Speech-only, or Speech+Text without changing the target turn.
-- **Beyond entity correction.** The external-data recipes cover accent,
-  dialect, and target-speaker recognition.
-- **Reproducible scoring.** Metrics, normalization, missing-output checks, and
-  schema validation are included.
+- **2026-09-15:** Released MM-ContextASR Bench metadata and 1,439 generated WAV
+  files, together with the KeSpeech, CV-Yue, and AliMeeting evaluation JSONL.
 
-## Installation
+## Download
 
-```bash
-git clone https://github.com/llh666521/MM-ContextASR.git
-cd MM-ContextASR
-pip install -e .
-```
-
-The core evaluator uses only the Python standard library.
-
-## Data
-
-The metadata-only benchmark release is hosted separately on Hugging Face:
+All benchmark data are hosted on
+[Hugging Face](https://huggingface.co/datasets/lilonghao/MM-ContextASR-Bench).
 
 ```python
 from datasets import load_dataset
 
-bench = load_dataset("lilonghao/MM-ContextASR-Bench", "mm_contextasr", split="test")
-kespeech = load_dataset("lilonghao/MM-ContextASR-Bench", "kespeech", split="test")
+mm = load_dataset("lilonghao/MM-ContextASR-Bench", "mm_contextasr", split="test")
 cv_yue = load_dataset("lilonghao/MM-ContextASR-Bench", "cv_yue", split="test")
+kespeech = load_dataset("lilonghao/MM-ContextASR-Bench", "kespeech", split="test")
 alimeeting = load_dataset("lilonghao/MM-ContextASR-Bench", "alimeeting", split="test")
 ```
 
-Audio is not mirrored. Each row stores stable source audio identifiers and
-enough context to reconstruct the evaluated input. Follow the source dataset's
-access terms to resolve identifiers to local audio.
-
-The release includes the 19,212-row KeSpeech evaluation JSONL with source audio
-identifiers but no KeSpeech audio. Obtain the corpus from its official source
-under the original license. The same manifest can also be regenerated locally:
+To download the complete release, including MM-ContextASR audio:
 
 ```bash
-python recipes/kespeech/prepare_eval.py \
-  --kespeech-root /path/to/KeSpeech \
-  --output data/kespeech/test.jsonl
+git lfs install
+git clone https://huggingface.co/datasets/lilonghao/MM-ContextASR-Bench
 ```
 
-## Quick evaluation
+## Dataset
 
-Predictions use one JSON object per line:
+| Track | Test examples | Released audio | Context signal | Metrics |
+| --- | ---: | --- | --- | --- |
+| MM-ContextASR Bench | 1,250 | 1,439 WAV files | controlled dialogue history | entity Recall |
+| KeSpeech | 19,212 | source audio IDs | multi-accent same-speaker history | CER, SER, entity Recall |
+| CV-Yue | 3,525 | source audio IDs | Cantonese same-speaker history | CER, SER, entity Recall |
+| AliMeeting Far-Far v4 | 2,850 | segment IDs and timestamps | far-field target-speaker history | target-only CER, SER |
+
+The external tracks contain complete evaluation JSONL and contextual metadata,
+but do not redistribute their source audio. Resolve the released audio IDs from
+the corresponding upstream datasets under their original licenses.
+
+### Record contents
+
+Each JSONL row preserves the current audio ID, reference transcription, ordered
+history, and source provenance. Track-specific fields provide scenario and
+entity labels, accent, speaker or meeting IDs, timestamps, and overlap
+statistics. MM-ContextASR rows additionally point to repository-relative audio
+under `audio/current/` and `audio/history/`.
 
 ```json
-{"id": "example-id", "prediction": "recognized text"}
+{
+  "id": "0001_explicit",
+  "current_audio": "audio/current/0001.wav",
+  "current_transcript": "...",
+  "history": [
+    {"role": "user", "audio": "audio/history/0001.wav", "text": "..."},
+    {"role": "assistant", "text": "..."}
+  ],
+  "scenario": "Explicit",
+  "entity": "..."
+}
 ```
 
+## Benchmark
+
+### Four context settings
+
+| Setting | Historical speech | Historical text | Assistant text |
+| --- | :---: | :---: | :---: |
+| No Context |  |  |  |
+| Text-only |  | yes | yes |
+| Speech-only | yes |  | yes |
+| Speech+Text | yes | yes | yes |
+
+### Five controlled scenarios
+
+For each of 250 current utterances, MM-ContextASR keeps the current speech,
+reference, and target entity fixed while changing only the dialogue history.
+
+| Scenario | Historical evidence | Capability tested |
+| --- | --- | --- |
+| Irrelevant | unrelated topic | ignore distractors |
+| Implicit | related topic without the entity | use indirect cues |
+| Explicit | correct entity appears | use direct evidence |
+| Correction | assistant corrects a historical ASR error | recover from errors |
+| Repeated Error | assistant repeats the historical error | resist error propagation |
+
+## Evaluation
+
+Predictions are JSONL records with `id` and `prediction` fields. The repository
+keeps evaluation intentionally lightweight:
+
 ```bash
-mm-context-asr validate path/to/test.jsonl
-mm-context-asr score \
-  --references path/to/test.jsonl \
+python evaluate.py \
+  --references test.jsonl \
   --predictions predictions.jsonl \
-  --metrics cer ser entity_recall \
   --normalizer zh
 ```
 
-For CV-Yue, use `--normalizer zh_t2s`. AliMeeting references are target-speaker
-words only; do not score the interfering speakers.
-
-## Input construction
-
-Canonical records retain dialogue order, historical transcript, historical
-audio ID, assistant response when present, current audio ID, and current-turn
-reference. Render model-facing requests with:
-
-```bash
-mm-context-asr render \
-  --input canonical.jsonl \
-  --mode speech_text \
-  --output requests.jsonl
-```
-
-Reference text, entities, and scenario labels are never inserted into the
-model prompt. See [docs/data.md](docs/data.md) for the schema and
-[docs/evaluation.md](docs/evaluation.md) for reporting requirements.
-
-## Repository layout
-
-```text
-MM-ContextASR/
-├── mm_context_asr/        # schema, rendering, normalization, metrics
-├── recipes/               # source-specific metadata preparation
-├── scripts/               # command-line utilities
-├── docs/                  # protocol and data documentation
-├── tests/                 # unit tests and leakage checks
-└── results/               # versioned benchmark tables
-```
-
-## Reproducibility rules
-
-1. Keep the evaluation IDs and target audio fixed across all four input modes.
-2. Preserve historical user, assistant, and current-user order.
-3. Report the model checkpoint and adapter identity for every result.
-4. Report missing predictions and request errors separately.
-5. Do not mix released Base, task-specific SFT, or merged SFT checkpoints.
+Use `--normalizer zh_t2s` for CV-Yue. Report checkpoint identity, missing
+predictions, and request errors with every result. AliMeeting references contain
+target-speaker words only.
 
 ## License
 
-Code is released under Apache-2.0. Dataset licenses are separate. Common Voice
-derived metadata is CC0-1.0; AliMeeting derivatives follow CC BY-SA 4.0. The
-KeSpeech config remains subject to the original non-commercial,
-no-distribution license. The MM-ContextASR Bench license will be stated in its
-final approved dataset card.
+The evaluation script is Apache-2.0. Dataset terms are listed per configuration
+in the Hugging Face release. External source licenses continue to apply.
 
 ## Citation
 
-A BibTeX entry will be added when the paper identifier is available.
+The paper and BibTeX entry will be added when the public identifier is ready.
+
