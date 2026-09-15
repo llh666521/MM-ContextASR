@@ -1,75 +1,118 @@
-<h1 align="center">MM-ContextASR</h1>
+<div align="center">
+
+# MM-ContextASR
+
+### Multimodal Conversational Context for LLM-Based ASR
+
+**A controlled benchmark and evaluation suite for understanding how dialogue
+history improves entity, accent, dialect, and target-speaker recognition.**
+
+[![GitHub stars](https://img.shields.io/github/stars/llh666521/MM-ContextASR?style=social)](https://github.com/llh666521/MM-ContextASR/stargazers)
+[![Hugging Face](https://img.shields.io/badge/Hugging%20Face-Dataset-FFD21E?logo=huggingface&logoColor=black)](https://huggingface.co/datasets/lilonghao/MM-ContextASR-Bench)
+[![Audio](https://img.shields.io/badge/Audio-1%2C439%20WAV-E7645A)](https://huggingface.co/datasets/lilonghao/MM-ContextASR-Bench/tree/main/audio)
+[![License](https://img.shields.io/badge/Code-Apache--2.0-29966F)](LICENSE)
+
+[Dataset](https://huggingface.co/datasets/lilonghao/MM-ContextASR-Bench) ·
+[Benchmark](#benchmark-design) ·
+[Quick Start](#quick-start) ·
+[Evaluation](#evaluation) ·
+[Citation](#citation)
+
+</div>
 
 <p align="center">
-  <b>Multimodal Conversational Context for LLM-Based ASR</b><br>
-  Data Construction, Training, and Benchmark
+  <img src="assets/overview.png" width="100%" alt="MM-ContextASR overview">
 </p>
 
-<p align="center">
-  <a href="https://huggingface.co/datasets/lilonghao/MM-ContextASR-Bench">Hugging Face Dataset</a>
-  &nbsp;|&nbsp;
-  <a href="#benchmark">Benchmark</a>
-  &nbsp;|&nbsp;
-  <a href="#evaluation">Evaluation</a>
-  &nbsp;|&nbsp;
-  <a href="#citation">Citation</a>
-</p>
-
-MM-ContextASR studies how speech and text from dialogue history help an ASR
-system recognize the current utterance. The release combines a controlled
-multimodal benchmark with evaluation metadata for multi-accent, Cantonese, and
-target-speaker ASR.
-
-<p align="center">
-  <img src="assets/length_distribution.png" width="100%" alt="Text-length distributions in MM-ContextASR Bench">
-</p>
+<table align="center">
+  <tr>
+    <td align="center"><strong>1,250</strong><br><sub>controlled examples</sub></td>
+    <td align="center"><strong>250</strong><br><sub>aligned groups</sub></td>
+    <td align="center"><strong>5</strong><br><sub>history scenarios</sub></td>
+    <td align="center"><strong>4</strong><br><sub>context settings</sub></td>
+    <td align="center"><strong>26,837</strong><br><sub>external eval rows</sub></td>
+  </tr>
+</table>
 
 ## News
 
-- **2026-09-15:** Released MM-ContextASR Bench metadata and 1,439 generated WAV
-  files, together with the KeSpeech, CV-Yue, and AliMeeting evaluation JSONL.
+- **2026-09-15:** MM-ContextASR Bench is public with complete metadata and
+  1,439 generated WAV files. Evaluation JSONL for KeSpeech, CV-Yue, and
+  AliMeeting is released alongside it.
 
-## Download
+## Why MM-ContextASR?
 
-All benchmark data are hosted on
-[Hugging Face](https://huggingface.co/datasets/lilonghao/MM-ContextASR-Bench).
+- **Controlled context.** The current speech, transcription, and target entity
+  stay fixed while only the preceding dialogue changes.
+- **Speech and text are evaluated separately.** Four matched input settings
+  expose what comes from semantic history and what comes from acoustic cues.
+- **Beyond entity correction.** The same protocol extends to multi-accent
+  Mandarin, Cantonese, and far-field target-speaker ASR.
+
+## Data Release
+
+| Track | Test examples | Audio in this release | Context signal | Metrics |
+| --- | ---: | --- | --- | --- |
+| **MM-ContextASR Bench** | **1,250** | **1,439 WAV files** | controlled dialogue | entity Recall |
+| KeSpeech | 19,212 | source IDs | multi-accent same-speaker history | CER, SER, Recall |
+| CV-Yue | 3,525 | source IDs | Cantonese same-speaker history | CER, SER, Recall |
+| AliMeeting Far-Far v4 | 2,850 | segment IDs + timestamps | target-speaker history | target-only CER, SER |
+
+MM-ContextASR audio is included under `audio/current/` and `audio/history/`.
+The three external tracks release complete evaluation JSONL and contextual
+metadata without redistributing source audio. Their IDs resolve against the
+original datasets under the corresponding upstream licenses.
+
+## Quick Start
+
+```bash
+pip install datasets
+```
 
 ```python
 from datasets import load_dataset
 
-mm = load_dataset("lilonghao/MM-ContextASR-Bench", "mm_contextasr", split="test")
-cv_yue = load_dataset("lilonghao/MM-ContextASR-Bench", "cv_yue", split="test")
-kespeech = load_dataset("lilonghao/MM-ContextASR-Bench", "kespeech", split="test")
-alimeeting = load_dataset("lilonghao/MM-ContextASR-Bench", "alimeeting", split="test")
+repo = "lilonghao/MM-ContextASR-Bench"
+
+mm = load_dataset(repo, "mm_contextasr", split="test")
+kespeech = load_dataset(repo, "kespeech", split="test")
+cv_yue = load_dataset(repo, "cv_yue", split="test")
+alimeeting = load_dataset(repo, "alimeeting", split="test")
 ```
 
-To download the complete release, including MM-ContextASR audio:
+Download the complete release, including MM-ContextASR audio:
 
 ```bash
 git lfs install
 git clone https://huggingface.co/datasets/lilonghao/MM-ContextASR-Bench
 ```
 
-## Dataset
+## Benchmark Design
 
-| Track | Test examples | Released audio | Context signal | Metrics |
-| --- | ---: | --- | --- | --- |
-| MM-ContextASR Bench | 1,250 | 1,439 WAV files | controlled dialogue history | entity Recall |
-| KeSpeech | 19,212 | source audio IDs | multi-accent same-speaker history | CER, SER, entity Recall |
-| CV-Yue | 3,525 | source audio IDs | Cantonese same-speaker history | CER, SER, entity Recall |
-| AliMeeting Far-Far v4 | 2,850 | segment IDs and timestamps | far-field target-speaker history | target-only CER, SER |
+### Four matched context settings
 
-The external tracks contain complete evaluation JSONL and contextual metadata,
-but do not redistribute their source audio. Resolve the released audio IDs from
-the corresponding upstream datasets under their original licenses.
+| Setting | Historical speech | Historical transcript | Assistant text |
+| --- | :---: | :---: | :---: |
+| **No Context** |  |  |  |
+| **Text-only** |  | Yes | Yes |
+| **Speech-only** | Yes |  | Yes |
+| **Speech+Text** | Yes | Yes | Yes |
 
-### Record contents
+Current-turn references, entity labels, and scenario labels are evaluation-only
+and must never be inserted into model prompts.
 
-Each JSONL row preserves the current audio ID, reference transcription, ordered
-history, and source provenance. Track-specific fields provide scenario and
-entity labels, accent, speaker or meeting IDs, timestamps, and overlap
-statistics. MM-ContextASR rows additionally point to repository-relative audio
-under `audio/current/` and `audio/history/`.
+### Five controlled history scenarios
+
+| Scenario | Historical evidence | Capability tested |
+| --- | --- | --- |
+| **Irrelevant** | unrelated topic | ignore distractors |
+| **Implicit** | related topic without the entity | use indirect semantic cues |
+| **Explicit** | correct entity appears | use direct contextual evidence |
+| **Correction** | assistant corrects a historical ASR error | recover from history errors |
+| **Repeated Error** | assistant repeats the historical error | resist error propagation |
+
+<details>
+<summary><strong>View the JSONL record format</strong></summary>
 
 ```json
 {
@@ -85,34 +128,30 @@ under `audio/current/` and `audio/history/`.
 }
 ```
 
-## Benchmark
+Each row preserves current audio, the reference transcription, ordered dialogue
+history, source provenance, and task-specific annotations. No internal storage
+URI or machine-specific path is included.
 
-### Four context settings
+</details>
 
-| Setting | Historical speech | Historical text | Assistant text |
-| --- | :---: | :---: | :---: |
-| No Context |  |  |  |
-| Text-only |  | yes | yes |
-| Speech-only | yes |  | yes |
-| Speech+Text | yes | yes | yes |
+## Dataset Statistics
 
-### Five controlled scenarios
+The controlled histories contain longer linguistic context than the current
+queries, while assistant responses provide the richest text signal.
 
-For each of 250 current utterances, MM-ContextASR keeps the current speech,
-reference, and target entity fixed while changing only the dialogue history.
-
-| Scenario | Historical evidence | Capability tested |
-| --- | --- | --- |
-| Irrelevant | unrelated topic | ignore distractors |
-| Implicit | related topic without the entity | use indirect cues |
-| Explicit | correct entity appears | use direct evidence |
-| Correction | assistant corrects a historical ASR error | recover from errors |
-| Repeated Error | assistant repeats the historical error | resist error propagation |
+<p align="center">
+  <img src="assets/length_distribution.png" width="100%" alt="MM-ContextASR text-length distributions">
+</p>
 
 ## Evaluation
 
-Predictions are JSONL records with `id` and `prediction` fields. The repository
-keeps evaluation intentionally lightweight:
+Predictions use one JSON object per line:
+
+```json
+{"id": "0001_explicit", "prediction": "recognized text"}
+```
+
+Run the lightweight scorer included in this repository:
 
 ```bash
 python evaluate.py \
@@ -127,10 +166,11 @@ target-speaker words only.
 
 ## License
 
-The evaluation script is Apache-2.0. Dataset terms are listed per configuration
-in the Hugging Face release. External source licenses continue to apply.
+The evaluation script is released under Apache-2.0. Dataset terms are listed
+per configuration on Hugging Face. External source licenses continue to apply.
 
 ## Citation
 
-The paper and BibTeX entry will be added when the public identifier is ready.
+The paper link and BibTeX entry will be added when the public identifier is
+available. Please star this repository or watch the release page for updates.
 
