@@ -9,35 +9,39 @@
 [![Hugging Face](https://img.shields.io/badge/Hugging%20Face-Dataset-FFD21E?logo=huggingface&logoColor=black)](https://huggingface.co/datasets/lilonghao/MM-ContextASR-Bench)
 [![Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-29966F)](LICENSE)
 
-[Pipeline](#1-data-pipeline) · [Training](#2-context-training) ·
+[Pipeline](#1-scenario-controlled-data-construction) · [Training](#2-multimodal-context-training) ·
 [Benchmark](#3-mm-contextasr-bench) ·
-[Dataset](https://huggingface.co/datasets/lilonghao/MM-ContextASR-Bench) ·
+[Download](#download) ·
 [Evaluation](#evaluation)
 
 </div>
 
-MM-ContextASR studies how **speech and text history** can jointly improve
-LLM-based ASR while reducing error propagation from imperfect transcripts.
+MM-ContextASR is a framework for studying how spoken and textual dialogue
+history can support current-turn recognition in LLM-based ASR. It comprises
+scenario-controlled data construction, multimodal context training, and a
+controlled benchmark for contextual understanding and entity correction.
 
-## 1. Data Pipeline
+## 1. Scenario-Controlled Data Construction
 
 <p align="center">
   <img src="assets/pipeline.svg" width="100%" alt="Scenario-controlled multimodal data construction pipeline">
 </p>
 
-- **Entity-driven:** construct long-tail entity and plausible confusion pairs.
-- **Scenario-controlled:** generate five types of dialogue history.
-- **Multimodal:** synthesize, validate, and align speech-text examples.
+1. **Entity Pool:** select proper names and long-tail terms across multiple domains.
+2. **Confusion Pair Construction:** retrieve phonetic neighbors and select plausible ASR confusions.
+3. **Dialogue Generation:** construct five controlled histories around each entity-confusion pair.
+4. **Speech Synthesis and Validation:** synthesize user speech and filter low-quality audio with ASR-based checks.
+5. **Multimodal Training Data:** package accepted dialogues into aligned Text-only, Speech-only, and Speech+Text examples.
 
-## 2. Context Training
+## 2. Multimodal Context Training
 
 <p align="center">
   <img src="assets/training.svg" width="76%" alt="Multimodal context training scheme">
 </p>
 
-- **Dialogue order:** interleave historical user inputs and assistant replies.
-- **Flexible context:** support No Context, Text-only, Speech-only, and Speech+Text.
-- **Current-turn objective:** compute loss only on the current transcript.
+- **Context representation:** combine historical speech, its ASR transcript, and the assistant response; all context-enabled settings retain assistant responses.
+- **Input organization:** interleave historical user and assistant turns in dialogue order, followed by the current speech.
+- **Supervision:** use dialogue history only as conditioning information and compute the training loss on the current transcript.
 
 | Setting | Historical speech | Historical transcript | Assistant text |
 | --- | :---: | :---: | :---: |
@@ -48,16 +52,37 @@ LLM-based ASR while reducing error propagation from imperfect transcripts.
 
 ## 3. MM-ContextASR Bench
 
-- **1,250 examples:** 250 aligned groups with 1,439 released WAV files.
-- **Five scenarios:** Irrelevant, Implicit, Explicit, Correction, and Repeated Error.
-- **Paired evaluation:** fix current speech and entity while varying only history.
+- **Composition:** 250 manually selected target entities and 1,250 examples, with 250 examples per scenario.
+- **Scenarios:** Irrelevant, Implicit, Explicit, Correction, and Repeated Error.
+- **Paired protocol:** hold the current speech, reference, and target entity fixed while varying only dialogue history.
+- **Split integrity:** hold out evaluation entity-confusion pairs and their dialogues from training.
+- **Metric:** report entity recall for each scenario and its macro-average as Overall.
 
 <p align="center">
-  <img src="assets/length_distribution.png" width="82%" alt="MM-ContextASR text-length distributions">
+  <img src="assets/length_distribution.png" width="76%" alt="MM-ContextASR text-length distributions">
 </p>
 
-The full benchmark metadata and audio are hosted on
-[Hugging Face](https://huggingface.co/datasets/lilonghao/MM-ContextASR-Bench).
+## Download
+
+Download the complete MM-ContextASR Bench release, including metadata and
+1,439 WAV files, from [Hugging Face](https://huggingface.co/datasets/lilonghao/MM-ContextASR-Bench):
+
+```bash
+git lfs install
+git clone https://huggingface.co/datasets/lilonghao/MM-ContextASR-Bench
+```
+
+Load the benchmark directly with Hugging Face Datasets:
+
+```python
+from datasets import load_dataset
+
+bench = load_dataset(
+    "lilonghao/MM-ContextASR-Bench",
+    "mm_contextasr",
+    split="test",
+)
+```
 
 ## External Evaluation
 
@@ -71,17 +96,8 @@ interfaces with context and source audio IDs, but do not redistribute audio.
 | CV-Yue | 3,525 | Cantonese; t2s CER, SER, Recall |
 | AliMeeting Far | 2,850 | target-speaker CER and SER |
 
-## Usage
-
-```python
-from datasets import load_dataset
-
-repo = "lilonghao/MM-ContextASR-Bench"
-bench = load_dataset(repo, "mm_contextasr", split="test")
-```
-
-Available configurations: `mm_contextasr`, `kespeech`, `cv_yue`, and
-`alimeeting`.
+The `kespeech`, `cv_yue`, and `alimeeting` configurations expose the external
+evaluation interfaces described above.
 
 ## Evaluation
 
