@@ -9,42 +9,47 @@
 [![Hugging Face](https://img.shields.io/badge/Hugging%20Face-Dataset-FFD21E?logo=huggingface&logoColor=black)](https://huggingface.co/datasets/lilonghao/MM-ContextASR-Bench)
 [![Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-29966F)](LICENSE)
 
-[Pipeline](#1-scenario-controlled-data-construction) · [Training](#2-multimodal-context-training) ·
-[Benchmark](#3-mm-contextasr-bench) ·
-[Download](#download) ·
-[Evaluation](#evaluation)
+[Data Pipeline](#data-pipeline) · [Context Training](#context-training) ·
+[Benchmark & Evaluation](#benchmark--evaluation) · [Download](#download)
 
 </div>
 
-MM-ContextASR is a framework for studying how spoken and textual dialogue
-history can support current-turn recognition in LLM-based ASR. It comprises
-scenario-controlled data construction, multimodal context training, and a
-controlled benchmark for contextual understanding and entity correction.
+MM-ContextASR studies how spoken and textual dialogue history can improve
+current-turn recognition in LLM-based ASR. The project brings together
+scenario-controlled data construction, multimodal context training, and
+entity-sensitive evaluation in a single framework.
 
-## 1. Scenario-Controlled Data Construction
+<p align="center">
+  <img src="assets/overview.svg" width="100%" alt="MM-ContextASR project overview">
+</p>
+
+## Highlights
+
+- **Data Pipeline:** A scenario-controlled pipeline for constructing entity-centric multimodal conversational contexts.
+- **Context Training:** A unified training framework supporting text, speech, and joint speech-text dialogue histories.
+- **Benchmark & Evaluation:** MM-ContextASR Bench for evaluating contextual ASR across diverse dialogue scenarios, complemented by reproducible protocols for KeSpeech, CV-Yue, and AliMeeting Far.
+
+## Data Pipeline
 
 <p align="center">
   <img src="assets/pipeline.svg" width="100%" alt="Scenario-controlled multimodal data construction pipeline">
 </p>
 
-1. **Entity Pool:** select proper names and long-tail terms across multiple domains.
-2. **Confusion Pair Construction:** construct phonetically confusable candidates and select plausible ASR confusions.
-3. **Dialogue Generation:** construct five controlled histories around each entity-confusion pair.
-4. **Speech Synthesis and Validation:** synthesize user speech and filter low-quality audio with ASR-based checks.
-5. **Multimodal Training Data:** package accepted dialogues into aligned Text-only, Speech-only, and Speech+Text examples.
+The pipeline proceeds through five stages: **entity selection**, **confusion
+construction**, **dialogue generation**, **speech synthesis**, and **quality
+control**. Accepted dialogues are packaged into aligned multimodal examples
+without changing the order of user and assistant turns.
 
-## 2. Multimodal Context Training
+## Context Training
 
 <p align="center">
-  <img src="assets/training.svg" width="76%" alt="Multimodal context training scheme">
+  <img src="assets/training.svg" width="78%" alt="Multimodal context training framework">
 </p>
 
-Historical user speech, its ASR transcript, and the assistant response are
-organized as user-assistant turns in dialogue order, followed by the current
-speech. All context-enabled settings retain assistant responses, while varying
-whether historical speech and transcripts are provided. Dialogue history serves
-only as conditioning information, and the training loss is computed on the
-current transcript.
+Historical speech, its ASR transcript, and assistant responses are interleaved
+in dialogue order before the current speech. Dialogue history is used only as
+conditioning information, while the training loss is computed on the current
+transcript.
 
 | Setting | Historical speech | Historical transcript | Assistant text |
 | --- | :---: | :---: | :---: |
@@ -53,20 +58,31 @@ current transcript.
 | **Speech-only** | ✓ | ✗ | ✓ |
 | **Speech+Text** | ✓ | ✓ | ✓ |
 
-## 3. MM-ContextASR Bench
+## Benchmark & Evaluation
 
-- **Composition:** 250 manually selected target entities and 1,250 examples, with 250 examples per scenario.
-- **Scenarios:** Irrelevant, Implicit, Explicit, Correction, and Repeated Error.
-- **Paired protocol:** hold the current speech, reference, and target entity fixed while varying only dialogue history.
-- **Metric:** report entity recall for each scenario and its macro-average as Overall.
+**MM-ContextASR Bench** is the benchmark released by this project. It contains
+five controlled dialogue scenarios: **Irrelevant**, **Implicit**, **Explicit**,
+**Correction**, and **Repeated Error**. Each aligned group keeps the current
+speech, reference transcript, and target entity fixed while varying only the
+dialogue history. The primary metric is entity recall.
 
 <p align="center">
-  <img src="assets/length_distribution.png" width="76%" alt="MM-ContextASR text-length distributions">
+  <img src="assets/length_distribution.png" width="62%" alt="Text-length distributions in MM-ContextASR Bench">
 </p>
+
+The paper additionally reports contextual ASR results on three existing
+datasets. These evaluation interfaces are provided for reproduction and are
+not part of MM-ContextASR Bench.
+
+| Evaluation protocol | Test set | Metrics |
+| --- | ---: | --- |
+| KeSpeech | 19,212 | CER, SER, entity recall |
+| CV-Yue | 3,525 | t2s CER, SER, entity recall |
+| AliMeeting Far | 2,850 | target-speaker CER, SER |
 
 ## Download
 
-Download MM-ContextASR Bench from
+Download the benchmark metadata and audio from
 [Hugging Face](https://huggingface.co/datasets/lilonghao/MM-ContextASR-Bench):
 
 ```bash
@@ -74,7 +90,7 @@ git lfs install
 git clone https://huggingface.co/datasets/lilonghao/MM-ContextASR-Bench
 ```
 
-Load the benchmark directly with Hugging Face Datasets:
+Or load a configuration directly with Hugging Face Datasets:
 
 ```python
 from datasets import load_dataset
@@ -86,34 +102,35 @@ bench = load_dataset(
 )
 ```
 
-## External Evaluation
-
-The paper also constructs contextual evaluation protocols on three existing
-datasets. These are **not part of MM-ContextASR Bench**; we release JSONL
-interfaces with context and source audio IDs, but do not redistribute audio.
-
-| Dataset | Rows | Evaluation |
-| --- | ---: | --- |
-| KeSpeech | 19,212 | multi-accent Mandarin; CER, SER, Recall |
-| CV-Yue | 3,525 | Cantonese; t2s CER, SER, Recall |
-| AliMeeting Far | 2,850 | target-speaker CER and SER |
-
-The `kespeech`, `cv_yue`, and `alimeeting` configurations expose the external
-evaluation interfaces described above.
+The `kespeech`, `cv_yue`, and `alimeeting` configurations contain contextual
+evaluation JSONL records with source audio identifiers. Audio from these
+external datasets is not redistributed.
 
 ## Evaluation
 
-```bash
-python evaluate.py --references test.jsonl --predictions predictions.jsonl
+Predictions use one JSON object per line:
+
+```json
+{"id": "example-id", "prediction": "recognized text"}
 ```
 
-Use `--normalizer zh_t2s` for CV-Yue. Report checkpoint identity, missing
-predictions, and request errors with each result.
+Run the lightweight scorer:
+
+```bash
+python evaluate.py \
+  --references test.jsonl \
+  --predictions predictions.jsonl
+```
+
+Use `--normalizer zh_t2s` for CV-Yue. The scorer reports CER, SER, entity
+recall, and missing predictions when the corresponding annotations are
+available.
 
 ## License
 
-Code is released under Apache-2.0. Dataset-specific terms are listed on
-Hugging Face; upstream licenses apply to external datasets.
+The code is released under [Apache-2.0](LICENSE). Dataset-specific terms are
+listed on Hugging Face, and upstream licenses continue to apply to external
+datasets.
 
 ## Citation
 
