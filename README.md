@@ -35,10 +35,13 @@ entity-sensitive evaluation in a single framework.
   <img src="assets/pipeline.svg" width="100%" alt="Scenario-controlled multimodal data construction pipeline">
 </p>
 
-The pipeline proceeds through five stages: **entity selection**, **confusion
-construction**, **dialogue generation**, **speech synthesis**, and **quality
-control**. Accepted dialogues are packaged into aligned multimodal examples
-without changing the order of user and assistant turns.
+The pipeline proceeds through five stages:
+
+- **Entity Selection:** Collect proper names and long-tail entities spanning people, places, organizations, products, and technical terms.
+- **Confusion Construction:** Construct phonetically grounded ASR confusions from homophones and near-homophones, then select a plausible alternative for each entity.
+- **Dialogue Generation:** Generate the current query and its dialogue history under five controlled contextual scenarios.
+- **Speech Synthesis:** Synthesize historical and current user queries into speech and verify them through ASR retranscription.
+- **Quality Control:** Filter degraded speech and structurally invalid dialogues before packaging the accepted samples into aligned multimodal examples.
 
 ## Context Training
 
@@ -51,12 +54,42 @@ in dialogue order before the current speech. Dialogue history is used only as
 conditioning information, while the training loss is computed on the current
 transcript.
 
-| Setting | Historical speech | Historical transcript | Assistant text |
-| --- | :---: | :---: | :---: |
-| **No Context** | ✗ | ✗ | ✗ |
-| **Text-only** | ✗ | ✓ | ✓ |
-| **Speech-only** | ✓ | ✗ | ✓ |
-| **Speech+Text** | ✓ | ✓ | ✓ |
+<table align="center">
+  <thead>
+    <tr>
+      <th align="left">Setting</th>
+      <th align="center">Historical<br>speech</th>
+      <th align="center">Historical<br>transcript</th>
+      <th align="center">Assistant<br>text</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>No Context</strong></td>
+      <td align="center">✗</td>
+      <td align="center">✗</td>
+      <td align="center">✗</td>
+    </tr>
+    <tr>
+      <td><strong>Text-only</strong></td>
+      <td align="center">✗</td>
+      <td align="center">✓</td>
+      <td align="center">✓</td>
+    </tr>
+    <tr>
+      <td><strong>Speech-only</strong></td>
+      <td align="center">✓</td>
+      <td align="center">✗</td>
+      <td align="center">✓</td>
+    </tr>
+    <tr>
+      <td><strong>Speech+Text</strong></td>
+      <td align="center">✓</td>
+      <td align="center">✓</td>
+      <td align="center">✓</td>
+    </tr>
+  </tbody>
+</table>
 
 ## Benchmark & Evaluation
 
@@ -108,10 +141,46 @@ external datasets is not redistributed.
 
 ## Evaluation
 
-Predictions use one JSON object per line:
+Each benchmark record contains the current utterance, its dialogue history,
+the target entity, and scenario metadata. For example:
 
 ```json
-{"id": "example-id", "prediction": "recognized text"}
+{
+  "id": "0013_implicit",
+  "dataset": "mm_contextasr",
+  "group_id": "0013",
+  "scenario": "Implicit",
+  "entity": "毛虾",
+  "current_audio": "audio/current/0013.wav",
+  "current_audio_id": "0013.wav",
+  "current_transcript": "请问毛虾一般生活在什么海域？",
+  "history": [
+    {
+      "role": "user",
+      "audio": "audio/history/0263.wav",
+      "audio_id": "0263.wav",
+      "text": "对虾和基围虾哪个营养价值更高？"
+    },
+    {
+      "role": "assistant",
+      "text": "对虾蛋白质含量丰富，还含有多种矿物质，基围虾则脂肪含量较低、口感更鲜嫩。两者营养价值各有优势，选择时可以根据个人口味和需求来决定。"
+    }
+  ],
+  "language": "zh-CN",
+  "split": "test",
+  "task": "contextual_asr",
+  "source": {
+    "audio": "generated",
+    "corpus": "MM-ContextASR Bench",
+    "release": "v1-anchor-aligned-20260901"
+  }
+}
+```
+
+Submit predictions as one JSON object per line, matched by `id`:
+
+```json
+{"id": "0013_implicit", "prediction": "请问毛虾一般生活在什么海域？"}
 ```
 
 Run the lightweight scorer:
