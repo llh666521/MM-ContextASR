@@ -20,7 +20,7 @@ scenario-controlled data construction, multimodal context training, and
 entity-sensitive evaluation in a single framework.
 
 <p align="center">
-  <img src="assets/overview.svg" width="100%" alt="MM-ContextASR project overview">
+  <img src="assets/overview.png" width="100%" alt="MM-ContextASR project overview">
 </p>
 
 ## Highlights
