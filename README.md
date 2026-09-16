@@ -171,8 +171,7 @@ the target entity, and scenario metadata. For example:
   "task": "contextual_asr",
   "source": {
     "audio": "generated",
-    "corpus": "MM-ContextASR Bench",
-    "release": "v1-anchor-aligned-20260901"
+    "corpus": "MM-ContextASR Bench"
   }
 }
 ```
