@@ -113,6 +113,70 @@ not part of MM-ContextASR Bench.
 | CV-Yue | 3,525 | t2s CER, SER, entity recall |
 | AliMeeting Far | 2,850 | target-speaker CER, SER |
 
+## Results
+
+All results are percentages. Bold marks the best value for each metric under
+the comparison scope used in the paper, including ties.
+
+### MM-ContextASR Bench
+
+| Model | Training | Context | Irrelevant ↑ | Implicit ↑ | Explicit ↑ | Correction ↑ | Repeated Error ↑ | Overall ↑ |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Qwen3-Omni-Instruct | Base | No Context | 74.00 | 74.00 | 74.00 | 74.00 | 74.00 | 74.00 |
+| Qwen3-Omni-Instruct | Base | Text-only | 68.40 | 74.00 | 95.60 | 96.00 | 67.60 | 80.32 |
+| Qwen3-Omni-Instruct | Base | Speech-only | 65.60 | 74.40 | 92.40 | 96.40 | 72.00 | 80.16 |
+| Qwen3-Omni-Instruct | Base | Speech+Text | 69.60 | 77.60 | 97.60 | 97.60 | 71.60 | 82.80 |
+| Qwen3-Omni-Instruct | Context SFT | No Context | **76.80** | 76.80 | 76.80 | 76.80 | 76.80 | 76.80 |
+| Qwen3-Omni-Instruct | Context SFT | Text-only | 76.40 | 83.20 | 97.20 | 98.40 | 77.20 | 86.48 |
+| Qwen3-Omni-Instruct | Context SFT | Speech-only | 76.40 | 82.40 | 98.40 | 98.40 | **82.80** | 87.68 |
+| Qwen3-Omni-Instruct | Context SFT | Speech+Text | 75.60 | **83.60** | **98.80** | **98.80** | 82.40 | **87.84** |
+| Step-Audio-2-mini | Base | No Context | 67.20 | 67.20 | 67.20 | 67.20 | 67.20 | 67.20 |
+| Step-Audio-2-mini | Base | Text-only | 63.20 | 63.20 | 93.20 | 90.00 | 52.80 | 72.48 |
+| Step-Audio-2-mini | Base | Speech-only | 64.80 | 63.20 | 91.60 | 89.20 | 59.20 | 73.60 |
+| Step-Audio-2-mini | Base | Speech+Text | 64.40 | 66.40 | 95.60 | 91.20 | 53.20 | 74.16 |
+| Step-Audio-2-mini | Context SFT | No Context | **72.80** | 72.80 | 72.80 | 72.80 | 72.80 | 72.80 |
+| Step-Audio-2-mini | Context SFT | Text-only | 70.80 | 76.00 | 96.00 | 97.60 | 77.40 | 83.56 |
+| Step-Audio-2-mini | Context SFT | Speech-only | **72.80** | 75.60 | **97.20** | **98.40** | 80.80 | 84.96 |
+| Step-Audio-2-mini | Context SFT | Speech+Text | 72.00 | **76.80** | 96.80 | **98.40** | **82.00** | **85.20** |
+
+### Accent and Dialect ASR
+
+CV-Yue uses simplified-Chinese normalization.
+
+| Dataset | Training | Context | Recall ↑ | CER ↓ | SER ↓ |
+| --- | --- | --- | --- | --- | --- |
+| KeSpeech | Base | No Context | 80.16 | 6.60 | 35.58 |
+| KeSpeech | Base | Text-only | 78.78 | 6.88 | 36.54 |
+| KeSpeech | Base | Speech-only | 78.73 | 6.42 | 36.79 |
+| KeSpeech | Base | Speech+Text | 79.13 | 6.30 | 36.10 |
+| KeSpeech | Context SFT | No Context | 83.71 | 4.51 | 29.56 |
+| KeSpeech | Context SFT | Text-only | 83.90 | 4.40 | 29.14 |
+| KeSpeech | Context SFT | Speech-only | **84.93** | 4.19 | 28.39 |
+| KeSpeech | Context SFT | Speech+Text | **84.93** | **4.17** | **28.20** |
+| CV-Yue | Base | No Context | 85.32 | 4.59 | 30.72 |
+| CV-Yue | Base | Text-only | 81.01 | 5.10 | 33.67 |
+| CV-Yue | Base | Speech-only | 81.27 | 4.95 | 32.68 |
+| CV-Yue | Base | Speech+Text | 83.04 | 4.79 | 32.28 |
+| CV-Yue | Context SFT | No Context | **88.10** | 4.89 | 33.08 |
+| CV-Yue | Context SFT | Text-only | 85.06 | 4.14 | 28.51 |
+| CV-Yue | Context SFT | Speech-only | 87.85 | 3.83 | 26.36 |
+| CV-Yue | Context SFT | Speech+Text | 87.85 | **3.74** | **26.33** |
+
+### Target-Speaker ASR
+
+Results on 2,850 overlapping far-field AliMeeting segments.
+
+| Dataset | Training | Context | CER ↓ | SER ↓ |
+| --- | --- | --- | --- | --- |
+| AliMeeting Far | Base | No Context | 29.70 | 82.74 |
+| AliMeeting Far | Base | Text-only | 31.87 | 82.98 |
+| AliMeeting Far | Base | Speech-only | 33.26 | 81.30 |
+| AliMeeting Far | Base | Speech+Text | 32.23 | 81.40 |
+| AliMeeting Far | Context SFT | No Context | 30.25 | 75.61 |
+| AliMeeting Far | Context SFT | Text-only | 29.60 | 74.60 |
+| AliMeeting Far | Context SFT | Speech-only | **24.59** | 72.18 |
+| AliMeeting Far | Context SFT | Speech+Text | 24.80 | **71.96** |
+
 ## Download
 
 Download the benchmark metadata and audio from
