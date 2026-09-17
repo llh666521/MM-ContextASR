@@ -54,39 +54,39 @@ in dialogue order before the current speech. Dialogue history is used only as
 conditioning information, while the training loss is computed on the current
 transcript.
 
-<table align="center">
+<table>
   <thead>
     <tr>
-      <th align="left">Setting</th>
-      <th align="center">Historical<br>speech</th>
-      <th align="center">Historical<br>transcript</th>
-      <th align="center">Assistant<br>text</th>
+      <th>Setting</th>
+      <th>Historical<br>speech</th>
+      <th>Historical<br>transcript</th>
+      <th>Assistant<br>text</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td><strong>No Context</strong></td>
-      <td align="center">✗</td>
-      <td align="center">✗</td>
-      <td align="center">✗</td>
+      <td>✗</td>
+      <td>✗</td>
+      <td>✗</td>
     </tr>
     <tr>
       <td><strong>Text-only</strong></td>
-      <td align="center">✗</td>
-      <td align="center">✓</td>
-      <td align="center">✓</td>
+      <td>✗</td>
+      <td>✓</td>
+      <td>✓</td>
     </tr>
     <tr>
       <td><strong>Speech-only</strong></td>
-      <td align="center">✓</td>
-      <td align="center">✗</td>
-      <td align="center">✓</td>
+      <td>✓</td>
+      <td>✗</td>
+      <td>✓</td>
     </tr>
     <tr>
       <td><strong>Speech+Text</strong></td>
-      <td align="center">✓</td>
-      <td align="center">✓</td>
-      <td align="center">✓</td>
+      <td>✓</td>
+      <td>✓</td>
+      <td>✓</td>
     </tr>
   </tbody>
 </table>
@@ -108,7 +108,7 @@ datasets. These evaluation interfaces are provided for reproduction and are
 not part of MM-ContextASR Bench.
 
 | Evaluation protocol | Test set | Metrics |
-| --- | ---: | --- |
+| --- | --- | --- |
 | KeSpeech | 19,212 | CER, SER, entity recall |
 | CV-Yue | 3,525 | t2s CER, SER, entity recall |
 | AliMeeting Far | 2,850 | target-speaker CER, SER |
