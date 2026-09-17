@@ -120,62 +120,91 @@ the comparison scope used in the paper, including ties.
 
 ### MM-ContextASR Bench
 
-| Model | Training | Context | Irrelevant ↑ | Implicit ↑ | Explicit ↑ | Correction ↑ | Repeated Error ↑ | Overall ↑ |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Qwen3-Omni-Instruct | Base | No Context | 74.00 | 74.00 | 74.00 | 74.00 | 74.00 | 74.00 |
-| Qwen3-Omni-Instruct | Base | Text-only | 68.40 | 74.00 | 95.60 | 96.00 | 67.60 | 80.32 |
-| Qwen3-Omni-Instruct | Base | Speech-only | 65.60 | 74.40 | 92.40 | 96.40 | 72.00 | 80.16 |
-| Qwen3-Omni-Instruct | Base | Speech+Text | 69.60 | 77.60 | 97.60 | 97.60 | 71.60 | 82.80 |
-| Qwen3-Omni-Instruct | Context SFT | No Context | **76.80** | 76.80 | 76.80 | 76.80 | 76.80 | 76.80 |
-| Qwen3-Omni-Instruct | Context SFT | Text-only | 76.40 | 83.20 | 97.20 | 98.40 | 77.20 | 86.48 |
-| Qwen3-Omni-Instruct | Context SFT | Speech-only | 76.40 | 82.40 | 98.40 | 98.40 | **82.80** | 87.68 |
-| Qwen3-Omni-Instruct | Context SFT | Speech+Text | 75.60 | **83.60** | **98.80** | **98.80** | 82.40 | **87.84** |
-| Step-Audio-2-mini | Base | No Context | 67.20 | 67.20 | 67.20 | 67.20 | 67.20 | 67.20 |
-| Step-Audio-2-mini | Base | Text-only | 63.20 | 63.20 | 93.20 | 90.00 | 52.80 | 72.48 |
-| Step-Audio-2-mini | Base | Speech-only | 64.80 | 63.20 | 91.60 | 89.20 | 59.20 | 73.60 |
-| Step-Audio-2-mini | Base | Speech+Text | 64.40 | 66.40 | 95.60 | 91.20 | 53.20 | 74.16 |
-| Step-Audio-2-mini | Context SFT | No Context | **72.80** | 72.80 | 72.80 | 72.80 | 72.80 | 72.80 |
-| Step-Audio-2-mini | Context SFT | Text-only | 70.80 | 76.00 | 96.00 | 97.60 | 77.40 | 83.56 |
-| Step-Audio-2-mini | Context SFT | Speech-only | **72.80** | 75.60 | **97.20** | **98.40** | 80.80 | 84.96 |
-| Step-Audio-2-mini | Context SFT | Speech+Text | 72.00 | **76.80** | 96.80 | **98.40** | **82.00** | **85.20** |
+<table>
+  <thead>
+    <tr>
+      <th align="center">Training</th>
+      <th align="center">Context</th>
+      <th align="center">Irrelevant ↑</th>
+      <th align="center">Implicit ↑</th>
+      <th align="center">Explicit ↑</th>
+      <th align="center">Correction ↑</th>
+      <th align="center">Repeated<br>Error ↑</th>
+      <th align="center">Overall ↑</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><th colspan="8" align="center">Qwen3-Omni-Instruct</th></tr>
+    <tr><td rowspan="4" align="center"><strong>Base</strong></td><td align="center">No Context</td><td align="center">74.00</td><td align="center">74.00</td><td align="center">74.00</td><td align="center">74.00</td><td align="center">74.00</td><td align="center">74.00</td></tr>
+    <tr><td align="center">Text-only</td><td align="center">68.40</td><td align="center">74.00</td><td align="center">95.60</td><td align="center">96.00</td><td align="center">67.60</td><td align="center">80.32</td></tr>
+    <tr><td align="center">Speech-only</td><td align="center">65.60</td><td align="center">74.40</td><td align="center">92.40</td><td align="center">96.40</td><td align="center">72.00</td><td align="center">80.16</td></tr>
+    <tr><td align="center">Speech+Text</td><td align="center">69.60</td><td align="center">77.60</td><td align="center">97.60</td><td align="center">97.60</td><td align="center">71.60</td><td align="center">82.80</td></tr>
+    <tr><td rowspan="4" align="center"><strong>Context SFT</strong></td><td align="center">No Context</td><td align="center"><strong>76.80</strong></td><td align="center">76.80</td><td align="center">76.80</td><td align="center">76.80</td><td align="center">76.80</td><td align="center">76.80</td></tr>
+    <tr><td align="center">Text-only</td><td align="center">76.40</td><td align="center">83.20</td><td align="center">97.20</td><td align="center">98.40</td><td align="center">77.20</td><td align="center">86.48</td></tr>
+    <tr><td align="center">Speech-only</td><td align="center">76.40</td><td align="center">82.40</td><td align="center">98.40</td><td align="center">98.40</td><td align="center"><strong>82.80</strong></td><td align="center">87.68</td></tr>
+    <tr><td align="center">Speech+Text</td><td align="center">75.60</td><td align="center"><strong>83.60</strong></td><td align="center"><strong>98.80</strong></td><td align="center"><strong>98.80</strong></td><td align="center">82.40</td><td align="center"><strong>87.84</strong></td></tr>
+    <tr><th colspan="8" align="center">Step-Audio-2-mini</th></tr>
+    <tr><td rowspan="4" align="center"><strong>Base</strong></td><td align="center">No Context</td><td align="center">67.20</td><td align="center">67.20</td><td align="center">67.20</td><td align="center">67.20</td><td align="center">67.20</td><td align="center">67.20</td></tr>
+    <tr><td align="center">Text-only</td><td align="center">63.20</td><td align="center">63.20</td><td align="center">93.20</td><td align="center">90.00</td><td align="center">52.80</td><td align="center">72.48</td></tr>
+    <tr><td align="center">Speech-only</td><td align="center">64.80</td><td align="center">63.20</td><td align="center">91.60</td><td align="center">89.20</td><td align="center">59.20</td><td align="center">73.60</td></tr>
+    <tr><td align="center">Speech+Text</td><td align="center">64.40</td><td align="center">66.40</td><td align="center">95.60</td><td align="center">91.20</td><td align="center">53.20</td><td align="center">74.16</td></tr>
+    <tr><td rowspan="4" align="center"><strong>Context SFT</strong></td><td align="center">No Context</td><td align="center"><strong>72.80</strong></td><td align="center">72.80</td><td align="center">72.80</td><td align="center">72.80</td><td align="center">72.80</td><td align="center">72.80</td></tr>
+    <tr><td align="center">Text-only</td><td align="center">70.80</td><td align="center">76.00</td><td align="center">96.00</td><td align="center">97.60</td><td align="center">77.40</td><td align="center">83.56</td></tr>
+    <tr><td align="center">Speech-only</td><td align="center"><strong>72.80</strong></td><td align="center">75.60</td><td align="center"><strong>97.20</strong></td><td align="center"><strong>98.40</strong></td><td align="center">80.80</td><td align="center">84.96</td></tr>
+    <tr><td align="center">Speech+Text</td><td align="center">72.00</td><td align="center"><strong>76.80</strong></td><td align="center">96.80</td><td align="center"><strong>98.40</strong></td><td align="center"><strong>82.00</strong></td><td align="center"><strong>85.20</strong></td></tr>
+  </tbody>
+</table>
 
 ### Accent and Dialect ASR
 
 CV-Yue uses simplified-Chinese normalization.
 
-| Dataset | Training | Context | Recall ↑ | CER ↓ | SER ↓ |
-| --- | --- | --- | --- | --- | --- |
-| KeSpeech | Base | No Context | 80.16 | 6.60 | 35.58 |
-| KeSpeech | Base | Text-only | 78.78 | 6.88 | 36.54 |
-| KeSpeech | Base | Speech-only | 78.73 | 6.42 | 36.79 |
-| KeSpeech | Base | Speech+Text | 79.13 | 6.30 | 36.10 |
-| KeSpeech | Context SFT | No Context | 83.71 | 4.51 | 29.56 |
-| KeSpeech | Context SFT | Text-only | 83.90 | 4.40 | 29.14 |
-| KeSpeech | Context SFT | Speech-only | **84.93** | 4.19 | 28.39 |
-| KeSpeech | Context SFT | Speech+Text | **84.93** | **4.17** | **28.20** |
-| CV-Yue | Base | No Context | 85.32 | 4.59 | 30.72 |
-| CV-Yue | Base | Text-only | 81.01 | 5.10 | 33.67 |
-| CV-Yue | Base | Speech-only | 81.27 | 4.95 | 32.68 |
-| CV-Yue | Base | Speech+Text | 83.04 | 4.79 | 32.28 |
-| CV-Yue | Context SFT | No Context | **88.10** | 4.89 | 33.08 |
-| CV-Yue | Context SFT | Text-only | 85.06 | 4.14 | 28.51 |
-| CV-Yue | Context SFT | Speech-only | 87.85 | 3.83 | 26.36 |
-| CV-Yue | Context SFT | Speech+Text | 87.85 | **3.74** | **26.33** |
+<table>
+  <thead>
+    <tr><th align="center">Training</th><th align="center">Context</th><th align="center">Recall ↑</th><th align="center">CER ↓</th><th align="center">SER ↓</th></tr>
+  </thead>
+  <tbody>
+    <tr><th colspan="5" align="center">KeSpeech</th></tr>
+    <tr><td rowspan="4" align="center"><strong>Base</strong></td><td align="center">No Context</td><td align="center">80.16</td><td align="center">6.60</td><td align="center">35.58</td></tr>
+    <tr><td align="center">Text-only</td><td align="center">78.78</td><td align="center">6.88</td><td align="center">36.54</td></tr>
+    <tr><td align="center">Speech-only</td><td align="center">78.73</td><td align="center">6.42</td><td align="center">36.79</td></tr>
+    <tr><td align="center">Speech+Text</td><td align="center">79.13</td><td align="center">6.30</td><td align="center">36.10</td></tr>
+    <tr><td rowspan="4" align="center"><strong>Context SFT</strong></td><td align="center">No Context</td><td align="center">83.71</td><td align="center">4.51</td><td align="center">29.56</td></tr>
+    <tr><td align="center">Text-only</td><td align="center">83.90</td><td align="center">4.40</td><td align="center">29.14</td></tr>
+    <tr><td align="center">Speech-only</td><td align="center"><strong>84.93</strong></td><td align="center">4.19</td><td align="center">28.39</td></tr>
+    <tr><td align="center">Speech+Text</td><td align="center"><strong>84.93</strong></td><td align="center"><strong>4.17</strong></td><td align="center"><strong>28.20</strong></td></tr>
+    <tr><th colspan="5" align="center">CV-Yue</th></tr>
+    <tr><td rowspan="4" align="center"><strong>Base</strong></td><td align="center">No Context</td><td align="center">85.32</td><td align="center">4.59</td><td align="center">30.72</td></tr>
+    <tr><td align="center">Text-only</td><td align="center">81.01</td><td align="center">5.10</td><td align="center">33.67</td></tr>
+    <tr><td align="center">Speech-only</td><td align="center">81.27</td><td align="center">4.95</td><td align="center">32.68</td></tr>
+    <tr><td align="center">Speech+Text</td><td align="center">83.04</td><td align="center">4.79</td><td align="center">32.28</td></tr>
+    <tr><td rowspan="4" align="center"><strong>Context SFT</strong></td><td align="center">No Context</td><td align="center"><strong>88.10</strong></td><td align="center">4.89</td><td align="center">33.08</td></tr>
+    <tr><td align="center">Text-only</td><td align="center">85.06</td><td align="center">4.14</td><td align="center">28.51</td></tr>
+    <tr><td align="center">Speech-only</td><td align="center">87.85</td><td align="center">3.83</td><td align="center">26.36</td></tr>
+    <tr><td align="center">Speech+Text</td><td align="center">87.85</td><td align="center"><strong>3.74</strong></td><td align="center"><strong>26.33</strong></td></tr>
+  </tbody>
+</table>
 
 ### Target-Speaker ASR
 
 Results on 2,850 overlapping far-field AliMeeting segments.
 
-| Dataset | Training | Context | CER ↓ | SER ↓ |
-| --- | --- | --- | --- | --- |
-| AliMeeting Far | Base | No Context | 29.70 | 82.74 |
-| AliMeeting Far | Base | Text-only | 31.87 | 82.98 |
-| AliMeeting Far | Base | Speech-only | 33.26 | 81.30 |
-| AliMeeting Far | Base | Speech+Text | 32.23 | 81.40 |
-| AliMeeting Far | Context SFT | No Context | 30.25 | 75.61 |
-| AliMeeting Far | Context SFT | Text-only | 29.60 | 74.60 |
-| AliMeeting Far | Context SFT | Speech-only | **24.59** | 72.18 |
-| AliMeeting Far | Context SFT | Speech+Text | 24.80 | **71.96** |
+<table>
+  <thead>
+    <tr><th align="center">Training</th><th align="center">Context</th><th align="center">CER ↓</th><th align="center">SER ↓</th></tr>
+  </thead>
+  <tbody>
+    <tr><th colspan="4" align="center">AliMeeting Far</th></tr>
+    <tr><td rowspan="4" align="center"><strong>Base</strong></td><td align="center">No Context</td><td align="center">29.70</td><td align="center">82.74</td></tr>
+    <tr><td align="center">Text-only</td><td align="center">31.87</td><td align="center">82.98</td></tr>
+    <tr><td align="center">Speech-only</td><td align="center">33.26</td><td align="center">81.30</td></tr>
+    <tr><td align="center">Speech+Text</td><td align="center">32.23</td><td align="center">81.40</td></tr>
+    <tr><td rowspan="4" align="center"><strong>Context SFT</strong></td><td align="center">No Context</td><td align="center">30.25</td><td align="center">75.61</td></tr>
+    <tr><td align="center">Text-only</td><td align="center">29.60</td><td align="center">74.60</td></tr>
+    <tr><td align="center">Speech-only</td><td align="center"><strong>24.59</strong></td><td align="center">72.18</td></tr>
+    <tr><td align="center">Speech+Text</td><td align="center">24.80</td><td align="center"><strong>71.96</strong></td></tr>
+  </tbody>
+</table>
 
 ## Download
 
