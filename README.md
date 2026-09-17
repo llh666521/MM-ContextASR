@@ -143,13 +143,14 @@ external datasets is not redistributed.
 
 | Protocol | Source mapping | Same-speaker check |
 | --- | --- | --- |
-| KeSpeech | Match `current_audio_id` and `history[].audio_id` to exact basenames in the official KeSpeech release. | Both IDs share the row-level `speaker_id`, also visible as the filename prefix. |
+| KeSpeech | Match `current_audio_id` and `history[].audio_id` to exact basenames under the official KeSpeech audio root; released basenames are unique within this evaluation set. | Both IDs share the row-level `speaker_id`, also visible as the filename prefix. |
 | CV-Yue | Resolve each ID as `clips/<audio_id>` in Common Voice Cantonese 26.0. | Current and history clips share the privacy-preserving row-level `speaker_id`. |
-| AliMeeting Far | Locate the SLR119 Eval recording by `meeting_id` and `far_channel`, then extract the current and history intervals using their respective start/end timestamps. | Both intervals belong to the target `speaker_id`; history is a same-speaker enrollment segment and need not occur earlier in the meeting. |
+| AliMeeting Far | Resolve `Eval_Ali_far/audio_dir/<meeting_id>_<far_channel>.wav`, then extract the current and history intervals using their respective start/end timestamps. | Both intervals belong to the target `speaker_id`; history is a same-speaker enrollment segment and need not occur earlier in the meeting. |
 
-For AliMeeting, `current_audio_id` identifies the derived evaluation example
-rather than an original SLR119 recording. The Hugging Face dataset card gives
-the complete field-level mapping contract.
+For AliMeeting, the reference and current clips use different derived folders
+but intentionally share a basename. `current_audio_id` identifies the derived
+evaluation example rather than an original SLR119 recording. The Hugging Face
+dataset card gives the complete field-level mapping contract.
 
 ## Evaluation
 
