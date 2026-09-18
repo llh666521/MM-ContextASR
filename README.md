@@ -7,9 +7,10 @@
 [![GitHub stars](https://img.shields.io/github/stars/llh666521/MM-ContextASR?style=flat&logo=github)](https://github.com/llh666521/MM-ContextASR/stargazers)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?logo=github)](https://github.com/llh666521/MM-ContextASR)
 [![Hugging Face](https://img.shields.io/badge/Hugging%20Face-Dataset-FFD21E?logo=huggingface&logoColor=black)](https://huggingface.co/datasets/lilonghao/MM-ContextASR-Bench)
+[![arXiv](https://img.shields.io/badge/arXiv-2609.19765-b31b1b?logo=arxiv)](https://arxiv.org/abs/2609.19765)
 [![Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-29966F)](LICENSE)
 
-[Data Pipeline](#data-pipeline) · [Context Training](#context-training) ·
+[Paper](https://arxiv.org/pdf/2609.19765) · [Data Pipeline](#data-pipeline) · [Context Training](#context-training) ·
 [Benchmark & Evaluation](#benchmark--evaluation) · [Download](#download)
 
 </div>
@@ -308,4 +309,14 @@ datasets.
 
 ## Citation
 
-The paper link and BibTeX entry will be added when available.
+Technical report: [arXiv:2609.19765](https://arxiv.org/abs/2609.19765)
+([PDF](https://arxiv.org/pdf/2609.19765)).
+
+```bibtex
+@article{li2026multimodal,
+  title   = {Multimodal Conversational Context for LLM-Based ASR: Data Construction, Training, and Benchmark},
+  author  = {Li, Longhao and Tang, Jian and Kong, Yuxiang and Chen, Jie and Zhang, Binbin and Xie, Lei and Li, Xiangang},
+  journal = {arXiv preprint arXiv:2609.19765},
+  year    = {2026}
+}
+```
